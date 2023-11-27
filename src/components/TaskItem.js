@@ -34,11 +34,12 @@ export default function TasklItem({ task, remove, toggle, update }) {
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={task.completed}
+            checked={task.completed && !isEditing}
             tabIndex={-1}
             disableRipple
             inputProps={{ "aria-labelledby": labelId }}
             onChange={toggle}
+            disabled={isEditing}
           />
         </ListItemIcon>
         <ListItemText id={labelId}>
@@ -52,7 +53,8 @@ export default function TasklItem({ task, remove, toggle, update }) {
               <TextField
                 value={updateTask}
                 style={{
-                  textDecoration: task.completed ? "line-through" : "none",
+                  textDecoration:
+                    task.completed && !isEditing ? "line-through" : "none",
                   color: "#4d4d4d",
                 }}
                 variant="standard"
@@ -78,7 +80,7 @@ export default function TasklItem({ task, remove, toggle, update }) {
           )}
         </ListItemText>
         <ListItemSecondaryAction>
-          {!task.completed ? (
+          {!task.completed && !isEditing ? (
             <Tooltip title={"Edit"}>
               <IconButton edge="end" aria-label="edit" onClick={editHandler}>
                 <DriveFileRenameOutlineIcon />
