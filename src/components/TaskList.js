@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Toolbar, Typography, Divider, List } from "@mui/material";
+import { v4 as uuid } from "uuid";
+import {
+  Box,
+  Toolbar,
+  Typography,
+  Divider,
+  List,
+  TextField,
+} from "@mui/material";
 import TaskForm from "./TaskForm";
 import TasklItem from "./TaskItem";
 
@@ -9,8 +17,15 @@ const initialTasks = () => {
   return data;
 };
 
-export default function TaskList({ allList }) {
+export default function TaskList({ allList, updateListTitle }) {
   const [tasks, setTasks] = useState(initialTasks);
+  const [updateList, setUpdateList] = useState("");
+
+  useEffect(() => {
+    if (allList?.title) {
+      setUpdateList(allList?.title);
+    }
+  }, [allList?.title]);
 
   const addTask = (task) => {
     setTasks((prevTask) => {
@@ -18,7 +33,7 @@ export default function TaskList({ allList }) {
         ...prevTask,
         {
           name: task,
-          id: crypto.randomUUID(),
+          id: uuid(),
           completed: false,
           listId: allList?.id,
         },
@@ -68,14 +83,32 @@ export default function TaskList({ allList }) {
       <Box sx={{ flex: 1 }}>
         {allList?.id ? (
           <>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Typography
-                variant="h4"
-                style={{ color: "#7076FE" }}
-                gutterBottom
-              >
-                {allList?.title}
-              </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 2,
+              }}
+            >
+              <TextField
+                value={updateList}
+                variant="outlined"
+                inputProps={{
+                  style: {
+                    color: "#7076FE",
+                    fontSize: "24px",
+                    fontWeight: "bold",
+                  },
+                }}
+                onChange={(e) => {
+                  setUpdateList(e.target.value);
+                }}
+                onBlur={(e) => {
+                  e.preventDefault();
+                  updateListTitle(allList?.id, updateList);
+                }}
+              />
             </Box>
             <Divider />
             <List

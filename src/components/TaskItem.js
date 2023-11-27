@@ -44,26 +44,23 @@ export default function TasklItem({ task, remove, toggle, update }) {
         </ListItemIcon>
         <ListItemText id={labelId}>
           {isEditing ? (
-            <form
-              onSubmit={(e) => {
+            <TextField
+              value={updateTask}
+              style={{
+                textDecoration:
+                  task.completed && !isEditing ? "line-through" : "none",
+                color: "#4d4d4d",
+              }}
+              variant="standard"
+              onChange={(e) => {
+                setUpdateTask(e.target.value);
+              }}
+              onBlur={(e) => {
                 e.preventDefault();
                 updateTaskHandler();
+                editHandler();
               }}
-            >
-              <TextField
-                value={updateTask}
-                style={{
-                  textDecoration:
-                    task.completed && !isEditing ? "line-through" : "none",
-                  color: "#4d4d4d",
-                }}
-                variant="standard"
-                onChange={(e) => {
-                  setUpdateTask(e.target.value);
-                }}
-                onBlur={editHandler}
-              />
-            </form>
+            />
           ) : (
             <>
               <Typography

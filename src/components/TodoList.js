@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { v4 as uuid } from "uuid";
 import {
   Drawer,
   Toolbar,
@@ -29,9 +30,21 @@ export default function TodoList() {
         ...prevList,
         {
           title: list,
-          id: crypto.randomUUID(),
+          id: uuid(),
         },
       ];
+    });
+  };
+
+  const updateListTitle = (id, newTitle) => {
+    setLists((prevList) => {
+      return prevList.map((list) => {
+        if (list.id === id) {
+          return { ...list, title: newTitle };
+        } else {
+          return list;
+        }
+      });
     });
   };
 
@@ -94,7 +107,9 @@ export default function TodoList() {
           })}
         </List>
       </Drawer>
-      {currentList && <TaskList allList={currentList} />}
+      {currentList && (
+        <TaskList allList={currentList} updateListTitle={updateListTitle} />
+      )}
     </>
   );
 }
