@@ -8,7 +8,7 @@ export default function Header() {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor: "#7076FE" }}
       >
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             My Lists
           </Typography>
           {/* <Button color="inherit">Login</Button> */}
