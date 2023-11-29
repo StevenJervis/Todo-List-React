@@ -7,7 +7,15 @@ import {
   Divider,
   List,
   TextField,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import TaskForm from "./TaskForm";
 import TasklItem from "./TaskItem";
 
@@ -17,15 +25,30 @@ const initialTasks = () => {
   return data;
 };
 
-export default function TaskList({ allList, updateListTitle }) {
+export default function TaskList({ allList, updateListTitle, removeList }) {
   const [tasks, setTasks] = useState(initialTasks);
   const [updateList, setUpdateList] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
     if (allList?.title) {
       setUpdateList(allList?.title);
     }
   }, [allList?.title]);
+
+  const removeAllListTasks = (listId) => {
+    setTasks((prevTask) => {
+      return prevTask.filter((t) => t.listId !== listId);
+    });
+  };
 
   const addTask = (task) => {
     setTasks((prevTask) => {
@@ -109,6 +132,34 @@ export default function TaskList({ allList, updateListTitle }) {
                   updateListTitle(allList?.id, updateList);
                 }}
               />
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                style={{ marginRight: 1 }}
+                onClick={handleOpenDialog}
+              >
+                <DeleteIcon />
+              </IconButton>
+              <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>{"Confirm Deletion"}</DialogTitle>
+                <form
+                  onSubmit={() => {
+                    removeList(allList?.id);
+                    removeAllListTasks(allList?.id);
+                    handleCloseDialog();
+                  }}
+                >
+                  <DialogContent>
+                    <DialogContentText>
+                      Are you sure you want to delete this list?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseDialog}>Cancel</Button>
+                    <Button type="submit">Delete</Button>
+                  </DialogActions>
+                </form>
+              </Dialog>
             </Box>
             <Divider />
             <List

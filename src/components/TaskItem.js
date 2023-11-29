@@ -45,6 +45,7 @@ export default function TasklItem({ task, remove, toggle, update }) {
         <ListItemText id={labelId}>
           {isEditing ? (
             <TextField
+              autoFocus
               value={updateTask}
               style={{
                 textDecoration:

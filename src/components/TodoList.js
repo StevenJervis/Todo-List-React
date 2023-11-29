@@ -48,6 +48,12 @@ export default function TodoList() {
     });
   };
 
+  const removeList = (id) => {
+    setLists((prevList) => {
+      return prevList.filter((t) => t.id !== id);
+    });
+  };
+
   const theme = useTheme();
   const screenSize = useMediaQuery(theme.breakpoints.down("md"));
   const drawerWidth = screenSize ? 0.3 : 0.25;
@@ -108,7 +114,11 @@ export default function TodoList() {
         </List>
       </Drawer>
       {currentList && (
-        <TaskList allList={currentList} updateListTitle={updateListTitle} />
+        <TaskList
+          allList={currentList}
+          updateListTitle={updateListTitle}
+          removeList={removeList}
+        />
       )}
     </>
   );
